@@ -1,8 +1,13 @@
 import React from 'react';
 import logo from '../assets/banana-01.png';
 import { useNavigate, Link } from 'react-router-dom';
+import {AuthContext} from "../context/AuthContext";
+import {useContext} from "react";
 
 function NavBar() {
+  const { isAuth, login, logout } = useContext(AuthContext);
+
+
   const navigate = useNavigate();
 
   return (
@@ -17,18 +22,23 @@ function NavBar() {
         </Link>
 
       <div>
-        <button
-          type="button"
-          onClick={() => navigate('/signin')}
-        >
-          Log in
-        </button>
-        <button
-          type="button"
-          onClick={() => navigate('/signup')}
-        >
-          Registreren
-        </button>
+        {/* Als gebruiker niet is ingelogd, staat de isAuth op false en wil je juist de login en register button zien */}
+          {isAuth === false ? (
+              <>
+                  <button type="button" onClick={login}>
+                      Log in
+                  </button>
+                  <button type="button" onClick={() => navigate('/signup')}>
+                      Registreren
+                  </button>
+              </>
+          ) : (
+         // Als gebruiker wel is ingelogd, staat de isAuth op true en wil je juist de logout button zien
+              <button type="button" onClick={logout}>
+                  Logout
+              </button>
+          )}
+
       </div>
     </nav>
   );
